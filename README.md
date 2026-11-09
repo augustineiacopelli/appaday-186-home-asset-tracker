@@ -9,6 +9,8 @@ Photograph your belongings room by room and Claude suggests the name, brand, mod
 
 ## How it works
 
+On first run a five step walkthrough explains the two photo slots, Claude suggestions and Confirm all, purchase price versus estimate, the coverage limit, and why to keep a backup off the phone, ending on Add my first item. The empty inventory shows the same three starting steps, and the walkthrough can be reopened anytime from Help in Settings.
+
 Each item has two photo slots, Whole item and Label or plate, that open the rear camera. With a Claude API key, Claude reads the photos and suggests the name, brand, model, category, condition, a serial number only when one is clearly legible, a replacement range for a new equivalent, a used fair market range, a confidence level and a one line basis. Suggested fields arrive tinted with a Claude tag that clears when you edit the field or tap Confirm all, and any field still unconfirmed at save time is recorded with the item. A blurry or unclear photo comes back as ambiguous with its reason and fills nothing. Without a key, a chooser offers to add one or to continue without AI, and every field can always be entered by hand.
 
 An item's value is its purchase price when you enter one (marked Yours). Otherwise it is the midpoint of the range that matches your policy basis, replacement cost or actual cash value (marked Est.), times quantity. Jewelry and Watches or Collectibles items over $1,500 carry a Sublimit badge.

@@ -148,6 +148,26 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent-hi);outli
 .resume{border-color:var(--accent);background:rgba(40,150,100,.12)}
 footer.site{text-align:center;font-size:.8rem;color:var(--muted);padding:1rem 0 0}
 
+/* tutorial */
+.tour{position:fixed;inset:0;z-index:70;background:rgba(5,9,8,.82);display:flex;align-items:flex-end;justify-content:center;padding:1rem}
+.tour-card{background:var(--surface);border:1px solid var(--line);border-radius:1.1rem;width:100%;max-width:28rem;padding:1.2rem 1.2rem 1rem;margin-bottom:env(safe-area-inset-bottom)}
+.tour-ic{width:3.2rem;height:3.2rem;border-radius:.9rem;background:rgba(40,150,100,.18);color:var(--accent-hi);display:flex;align-items:center;justify-content:center;margin-bottom:.8rem}
+.tour-ic svg{width:1.7rem;height:1.7rem}
+.tour-card h3{font-size:1.2rem;margin:0 0 .5rem}
+.tour-card p{margin:0 0 .6rem;color:var(--muted);font-size:.95rem}
+.tour-card ul{margin:0 0 .6rem;padding-left:1.1rem;color:var(--muted);font-size:.92rem}
+.tour-card li{margin-bottom:.35rem}
+.tour-card b{color:var(--text)}
+.tour-dots{display:flex;gap:.4rem;justify-content:center;margin:.8rem 0}
+.tour-dots i{width:.5rem;height:.5rem;border-radius:50%;background:var(--line)}
+.tour-dots i.on{background:var(--accent-hi);width:1.3rem;border-radius:.3rem}
+.tour-nav{display:flex;gap:.5rem}
+.tour-nav .btn{flex:1}
+.empty .row{justify-content:center;margin-top:1rem}
+.empty .steps{text-align:left;max-width:20rem;margin:1rem auto 0;font-size:.9rem}
+.empty .steps>div{display:flex;gap:.6rem;align-items:flex-start;margin-bottom:.55rem}
+.empty .steps span{flex:0 0 1.6rem;height:1.6rem;border-radius:50%;background:var(--accent);color:var(--ink);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.8rem}
+
 /* dialog + toast */
 .dlg-back{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.6);display:flex;align-items:flex-end;justify-content:center;padding:1rem}
 .dlg{background:var(--surface);border:1px solid var(--line);border-radius:1rem;padding:1.1rem;width:100%;max-width:28rem;margin-bottom:env(safe-area-inset-bottom)}
@@ -259,6 +279,11 @@ footer.site{text-align:center;font-size:.8rem;color:var(--muted);padding:1rem 0 
         <input type="file" id="restoreIn" accept="application/json,.json" class="hidden">
       </div>
       <div class="card">
+        <h3>Help</h3>
+        <p class="muted small" style="margin-top:0">A one minute walkthrough of photos, values, coverage and backups.</p>
+        <button class="btn" id="helpBtn">Show me how it works</button>
+      </div>
+      <div class="card">
         <h3>Erase</h3>
         <p class="muted small" style="margin-top:0">Removes every item, photo and setting from this device. Your Claude key is kept.</p>
         <button class="btn danger" id="eraseBtn">Erase everything</button>
@@ -274,6 +299,18 @@ footer.site{text-align:center;font-size:.8rem;color:var(--muted);padding:1rem 0 
     <button data-v="dash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Dashboard</button>
     <button data-v="set"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</button>
   </nav>
+</div>
+
+<!-- First run walkthrough -->
+<div class="tour hidden" id="tour" role="dialog" aria-modal="true" aria-labelledby="tourTitle">
+  <div class="tour-card">
+    <div id="tourBody"></div>
+    <div class="tour-dots" id="tourDots"></div>
+    <div class="tour-nav">
+      <button class="btn ghost" id="tourBack">Skip</button>
+      <button class="btn primary" id="tourNext">Next</button>
+    </div>
+  </div>
 </div>
 
 <!-- Editor sheet -->
@@ -403,7 +440,7 @@ async function loadAll() {
   var settings = await idb().get('settings');
   var first = !settings;
   S.items = Array.isArray(items) ? items : [];
-  S.settings = Object.assign({ rooms: ROOMS_DEFAULT.slice(), coverageLimit: null, basis: 'replacement', lastBackup: null, lastChange: null }, settings || {});
+  S.settings = Object.assign({ rooms: ROOMS_DEFAULT.slice(), coverageLimit: null, basis: 'replacement', lastBackup: null, lastChange: null, helpSeen: false }, settings || {});
   if (S.settings.rooms.indexOf('Unassigned') < 0) S.settings.rooms.push('Unassigned');
   if (first) {
     await idb().set('settings', S.settings);
@@ -491,7 +528,16 @@ function renderItems() {
   var rows = filtered();
   var sum = rows.reduce(function (s, it) { return s + effValue(it); }, 0);
   $('itemCount').textContent = rows.length ? rows.length + (rows.length === 1 ? ' item, ' : ' items, ') + money(sum) : '';
-  if (!S.items.length) { list.innerHTML = '<div class="empty"><b>No items yet.</b><br>Tap Add item, snap the whole item and its label, and Claude fills in the details.</div>'; return; }
+  if (!S.items.length) {
+    list.innerHTML = '<div class="empty"><b>Your inventory is empty.</b><br>Start with one room and work around it.' +
+      '<div class="steps"><div><span>1</span><div>Tap <b>Add item</b> and photograph the whole item, then its label or plate.</div></div>' +
+      '<div><span>2</span><div>Check what Claude filled in, or type it yourself, and save.</div></div>' +
+      '<div><span>3</span><div>Set your coverage limit in <b>Settings</b> and download a backup.</div></div></div>' +
+      '<div class="row"><button class="btn" id="emptyHelp">How it works</button><button class="btn primary" id="emptyAdd">Add my first item</button></div></div>';
+    $('emptyHelp').addEventListener('click', function () { openTour(0); });
+    $('emptyAdd').addEventListener('click', function () { openEditor(null); });
+    return;
+  }
   if (!rows.length) { list.innerHTML = '<div class="empty">Nothing matches these filters.</div>'; return; }
   rows.forEach(function (it) {
     var v = effValue(it);
@@ -1176,6 +1222,36 @@ async function eraseAll() {
   renderSettings(); toast('Everything was erased.');
 }
 
+// ---------- walkthrough ----------
+var ICO = {
+  home: '<path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  cam: '<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  save: '<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>'
+};
+var TOUR = [
+  { ic: 'home', t: 'Welcome to Home Asset Tracker', h: '<p>Build a record of what you own, room by room, so an insurance claim after a fire, flood or theft is a list you already have instead of one you try to remember.</p><p>Everything stays on this device. Nothing is uploaded except photos you choose to send to Claude.</p>' },
+  { ic: 'cam', t: 'Snap two photos per item', h: '<ul><li><b>Whole item</b> shows what it is and its condition.</li><li><b>Label or plate</b> is the sticker on the back or bottom with the brand, model and serial.</li></ul><p>With a Claude key, Claude reads both and fills in the details. No key? Choose <b>Continue without AI</b> and type the fields yourself. Photos are optional either way.</p>' },
+  { ic: 'check', t: 'Check what Claude suggests', h: '<p>Suggested fields arrive <b style="color:var(--claude)">tinted with a Claude tag</b>. Edit any field to make it yours, or tap <b>Confirm all</b> when they look right.</p><p>Claude gives a price range for a new replacement and a used range. If you know what you paid, enter the <b>purchase price</b> and it counts instead of the estimate.</p>' },
+  { ic: 'shield', t: 'See if you are covered', h: '<p>In <b>Settings</b>, enter the personal property limit from your policy declarations page and choose <b>replacement cost</b> or <b>actual cash value</b>.</p><p>The <b>Dashboard</b> bar turns amber near your limit and red with the dollar amount if you are underinsured.</p>' },
+  { ic: 'save', t: 'Keep a copy off this phone', h: '<ul><li><b>PDF report</b> on the Dashboard is what you hand your insurer.</li><li><b>Download backup</b> in Settings saves every item and photo in one file. Keep it in email or cloud storage, because if this phone is lost, so is the inventory.</li></ul><p>You can reopen this guide anytime from Settings.</p>' }
+];
+var tourIx = 0;
+function openTour(i) { tourIx = i || 0; renderTour(); $('tour').classList.remove('hidden'); }
+function renderTour() {
+  var st = TOUR[tourIx], last = tourIx === TOUR.length - 1;
+  $('tourBody').innerHTML = '<div class="tour-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICO[st.ic] + '</svg></div><h3 id="tourTitle">' + st.t + '</h3>' + st.h;
+  $('tourDots').innerHTML = TOUR.map(function (_, k) { return '<i class="' + (k === tourIx ? 'on' : '') + '"></i>'; }).join('');
+  $('tourBack').textContent = tourIx === 0 ? 'Skip' : 'Back';
+  $('tourNext').textContent = last ? (S.items.length ? 'Done' : 'Add my first item') : 'Next';
+}
+async function closeTour(thenAdd) {
+  $('tour').classList.add('hidden');
+  if (!S.settings.helpSeen) { S.settings.helpSeen = true; try { await saveSettings(); } catch (e) {} }
+  if (thenAdd) { showView('items'); openEditor(null); }
+}
+
 // ---------- boot ----------
 function wire() {
   document.querySelectorAll('nav.tabs button').forEach(function (b) { b.addEventListener('click', function () { showView(b.dataset.v); }); });
@@ -1206,6 +1282,10 @@ function wire() {
   $('restoreBtn').addEventListener('click', function () { $('restoreIn').click(); });
   $('restoreIn').addEventListener('change', function () { var f = this.files && this.files[0]; this.value = ''; if (f) importBackup(f); });
   $('eraseBtn').addEventListener('click', eraseAll);
+  $('helpBtn').addEventListener('click', function () { openTour(0); });
+  $('tourBack').addEventListener('click', function () { if (tourIx === 0) closeTour(false); else { tourIx--; renderTour(); } });
+  $('tourNext').addEventListener('click', function () { if (tourIx === TOUR.length - 1) closeTour(!S.items.length); else { tourIx++; renderTour(); } });
+  $('tour').addEventListener('click', function (e) { if (e.target === this) closeTour(false); });
   $('resumeBtn').addEventListener('click', resumeEditor);
   $('pdfBtn').addEventListener('click', function () { try { exportPDF(); } catch (e) { toast('PDF failed: ' + (e.message || e)); } });
   $('csvBtn').addEventListener('click', exportCSV);
@@ -1222,6 +1302,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     return;
   }
   showView('items');
+  if (!S.settings.helpSeen && !S.items.length) openTour(0);
 });
 </script>
 </body>
